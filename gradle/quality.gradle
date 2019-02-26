@@ -1,0 +1,35 @@
+
+/**
+ * Code formatter settings
+ *
+ * @since 0.1.0
+ */
+spotless {
+	groovy {
+		//licenseHeaderFile 'spotless.license.java'
+		excludeJava() // excludes all Java sources within the Groovy source dirs from formatting
+		paddedCell() // Avoid cyclic ambiguities
+		greclipse()
+	}
+	groovyGradle {
+		target '*.gradle', 'gradle/*.gradle'
+		greclipse()
+	}
+}
+
+/**
+ * Static analysis settings
+ *
+ * @since 0.1.0
+ */
+codenarc {
+	configFile file('src/config/codenarc.groovy')
+	toolVersion "1.2"
+}
+
+/**
+ * Code coverage settings
+ *
+ * @since 0.1.0
+ */
+jacoco { toolVersion = "0.8.1" }
