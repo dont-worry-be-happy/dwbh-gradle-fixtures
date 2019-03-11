@@ -7,8 +7,9 @@ buildscript {
 plugins {
 	id 'groovy'
 	id 'codenarc'
-	id 'jacoco'
+	id 'java-gradle-plugin'
 	id "com.diffplug.gradle.spotless" version "3.18.0"
+    id "com.github.hierynomus.license" version "0.15.0"
 }
 
 apply from: 'gradle/quality.gradle'
@@ -16,9 +17,10 @@ apply from: 'gradle/quality.gradle'
 repositories { mavenCentral() }
 
 configurations { driver }
+
 dependencies { driver 'org.postgresql:postgresql:42.2.5' }
 
-configurations.driver.each {File file ->
+configurations.driver.each { File file ->
 	gradle.class.classLoader.addURL(file.toURI().toURL())
 }
 
@@ -27,6 +29,56 @@ dependencies {
 	implementation localGroovy()
 
 	compile 'org.yaml:snakeyaml:1.23'
-	compile 'org.postgresql:postgresql:42.2.5'
+
+	testCompile gradleTestKit()
+	testCompile 'org.postgresql:postgresql:42.2.5'
+	testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
+	testCompile "org.testcontainers:spock:1.10.6"
+	testCompile "org.testcontainers:postgresql:1.10.6"
 }
 
+sourceSets {
+	integrationTest {
+		groovy{ srcDir file('src/integTest/groovy') }
+		resources { srcDir file('src/integTest/resources') }
+
+		compileClasspath += sourceSets.main.output + configurations.testRuntime + configurations.compileClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+	functionalTest {
+		groovy { srcDirs file('src/funcTest/groovy') }
+		resources { srcDir file('src/funcTest/resources') }
+
+		compileClasspath += sourceSets.main.output + configurations.testRuntime + configurations.compileClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+}
+
+gradlePlugin {
+	plugins {
+		fixturesPlugin {
+			id = 'dwbh.gradle.fixtures'
+			implementationClass = 'dwbh.gradle.fixtures.FixturesPlugin'
+		}
+	}
+}
+
+task integrationTest(type: Test) {
+	description     = 'Runs the integration tests.'
+	group           = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath       = sourceSets.integrationTest.runtimeClasspath
+
+	mustRunAfter test
+}
+
+task functionalTest(type: Test) {
+	description     = 'Runs the functional tests.'
+	group           = 'verification'
+	testClassesDirs = sourceSets.functionalTest.output.classesDirs
+	classpath       = sourceSets.functionalTest.runtimeClasspath
+
+	mustRunAfter test
+}
+
+check.dependsOn integrationTest, functionalTest

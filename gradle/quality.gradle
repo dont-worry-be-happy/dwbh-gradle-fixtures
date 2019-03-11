@@ -28,8 +28,15 @@ codenarc {
 }
 
 /**
- * Code coverage settings
+ * Configuration to check license properly
  *
  * @since 0.1.0
  */
-jacoco { toolVersion = "0.8.1" }
+license {
+    header = file('src/config/gpl3.license')
+
+    mapping(
+        groovy: 'SLASHSTAR_STYLE',
+        yml: 'SCRIPT_STYLE',
+    )
+}
