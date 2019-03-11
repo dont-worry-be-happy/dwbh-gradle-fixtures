@@ -24,21 +24,21 @@ class FixturesPlugin implements Plugin<Project> {
 	 *
 	 * @since 0.1.0
 	 */
-	static final String DEFAULT_CLEAN_DIR = new File('fixtures/clean')
+	static final File DEFAULT_CLEAN_DIR = new File('fixtures/clean')
 
 	/**
 	 * Default directory where to find the fixtures to clean the database
 	 *
 	 * @since 0.1.0
 	 */
-	static final String DEFAULT_LOAD_DIR = new File('etc/fixtures/load')
+	static final File DEFAULT_LOAD_DIR = new File('fixtures/load')
 
 	/**
 	 * Default file to read database configuration from
 	 *
 	 * @since 0.1.0
 	 */
-	static final File DEFAULT_CONFIG_FILE = new File('etc/fixtures/fixtures.yaml')
+	static final File DEFAULT_CONFIG_FILE = new File('fixtures/fixtures.yml')
 
 	@Override
 	void apply(Project project) {
@@ -69,11 +69,13 @@ class FixturesPlugin implements Plugin<Project> {
 			project.tasks.getByName(TASK_NAME_LOAD).configure { FixturesTask t ->
 				t.inputDir = loadDir
 				t.configFile = configFile
+				t.isClean = false
 			}
 
 			project.tasks.getByName(TASK_NAME_CLEAN).configure { FixturesTask t ->
 				t.inputDir = cleanDir
 				t.configFile = configFile
+				t.isClean = true
 			}
 		}
 	}

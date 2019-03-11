@@ -1,5 +1,6 @@
 package dwbh.gradle.fixtures
 
+import groovy.transform.Generated
 import org.yaml.snakeyaml.Yaml
 
 /**
@@ -7,7 +8,12 @@ import org.yaml.snakeyaml.Yaml
  *
  * @since 0.1.0
  */
-class FixturesUtils {
+final class FixturesUtils {
+
+	@Generated
+	private FixturesUtils() {
+		// can't be instantiated
+	}
 
 	/**
 	 * Filters files with name ending with sql

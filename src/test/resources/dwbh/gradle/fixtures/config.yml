@@ -1,0 +1,4 @@
+dataSource:
+  user: user
+  password: password
+  driverClassName: driverClassName

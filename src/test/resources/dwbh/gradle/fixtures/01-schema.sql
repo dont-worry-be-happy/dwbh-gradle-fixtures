@@ -1,0 +1,1 @@
+CREATE TABLE avengers (id serial PRIMARY KEY, name text);
