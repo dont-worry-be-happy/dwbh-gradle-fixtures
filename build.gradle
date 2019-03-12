@@ -9,7 +9,7 @@ plugins {
 	id 'codenarc'
 	id 'java-gradle-plugin'
 	id "com.diffplug.gradle.spotless" version "3.18.0"
-    id "com.github.hierynomus.license" version "0.15.0"
+	id "com.github.hierynomus.license" version "0.15.0"
 }
 
 apply from: 'gradle/quality.gradle'

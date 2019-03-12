@@ -6,7 +6,6 @@
  */
 spotless {
 	groovy {
-		//licenseHeaderFile 'spotless.license.java'
 		excludeJava() // excludes all Java sources within the Groovy source dirs from formatting
 		paddedCell() // Avoid cyclic ambiguities
 		greclipse()
@@ -33,10 +32,10 @@ codenarc {
  * @since 0.1.0
  */
 license {
-    header = file('src/config/gpl3.license')
+	header = file('src/config/gpl3.license')
 
-    mapping(
-        groovy: 'SLASHSTAR_STYLE',
-        yml: 'SCRIPT_STYLE',
-    )
+	mapping(
+			groovy: 'SLASHSTAR_STYLE',
+			yml: 'SCRIPT_STYLE',
+			)
 }
