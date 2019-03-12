@@ -1,5 +1,5 @@
-[![Travis](https://travis-ci.org/dont-worry-be-happy/dwbh-fixtures-gradle-plugin.svg?branch=master)](https://travis-ci.org/dont-worry-be-happy/dwbh-fixtures-gradle-plugin) 
-[![License](https://img.shields.io/github/license/dont-worry-be-happy/dwbh-fixtures-gradle-plugin.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![Travis](https://travis-ci.org/dont-worry-be-happy/dwbh-gradle-fixtures.svg?branch=master)](https://travis-ci.org/dont-worry-be-happy/dwbh-gradle-fixtures) 
+[![License](https://img.shields.io/github/license/dont-worry-be-happy/dwbh-gradle-fixtures.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 # DWBH FIXTURES GRADLE PLUGIN
 
