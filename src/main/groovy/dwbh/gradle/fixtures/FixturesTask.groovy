@@ -69,32 +69,32 @@ class FixturesTask extends DefaultTask {
 	void executeTask() {
 		logger.lifecycle "------------------${this.name.toUpperCase()}-----------------"
 
-        if (!configFile.exists()) {
-            throw new GradleException('no database configuration found')
-        }
+		if (!configFile.exists()) {
+			throw new GradleException('no database configuration found')
+		}
 
 		File[] sqlFiles = isClean ? sqlFilesClean(inputDir) : sqlFilesLoad(inputDir)
 
-        if (!sqlFiles) {
-            logger.lifecycle('no sql files found')
-            return
-        }
+		if (!sqlFiles) {
+			logger.lifecycle('no sql files found')
+			return
+		}
 
-        processFiles(configFile, sqlFiles)
+		processFiles(configFile, sqlFiles)
 	}
 
-    private void processFiles(File configFile, File[] sqlFiles) {
-        Map<String,?> config = FixturesUtils.loadYaml(configFile)
-        SqlProcessor processor = new SqlProcessor(config, sqlFiles, logger)
+	private void processFiles(File configFile, File[] sqlFiles) {
+		Map<String,?> config = FixturesUtils.loadYaml(configFile)
+		SqlProcessor processor = new SqlProcessor(config, sqlFiles, logger)
 
-        processor.process()
-    }
+		processor.process()
+	}
 
-    private File[] sqlFilesLoad(File inputDir) {
-        return inputDir?.listFiles(FixturesUtils.onlySqlFiles)?.sort()
-    }
+	private File[] sqlFilesLoad(File inputDir) {
+		return inputDir?.listFiles(FixturesUtils.onlySqlFiles)?.sort()
+	}
 
-    private File[] sqlFilesClean(File inputDir) {
-        return sqlFilesLoad(inputDir)?.reverse()
-    }
+	private File[] sqlFilesClean(File inputDir) {
+		return sqlFilesLoad(inputDir)?.reverse()
+	}
 }

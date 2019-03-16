@@ -32,41 +32,41 @@ import org.gradle.api.logging.Logger
 @Testcontainers
 class SqlProcessorSpecification extends Specification {
 
-    static final File SQL_DIR = 'src/test/resources/dwbh/gradle/fixtures' as File
-    static final String CONTAINER_SEED = 'dwbh'
+	static final File SQL_DIR = 'src/test/resources/dwbh/gradle/fixtures' as File
+	static final String CONTAINER_SEED = 'dwbh'
 
-    @Shared
-    PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer()
-            .withDatabaseName(CONTAINER_SEED)
-            .withUsername(CONTAINER_SEED)
-            .withPassword(CONTAINER_SEED)
+	@Shared
+	PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer()
+	.withDatabaseName(CONTAINER_SEED)
+	.withUsername(CONTAINER_SEED)
+	.withPassword(CONTAINER_SEED)
 
-    void 'apply fixtures' () {
-        given: 'a database connection configuration'
-        Map<String, ?> config = [
-            dataSource:[
-                url:postgreSQLContainer.jdbcUrl,
-                user:postgreSQLContainer.username,
-                password:postgreSQLContainer.password,
-            ],
-        ]
+	void 'apply fixtures' () {
+		given: 'a database connection configuration'
+		Map<String, ?> config = [
+			dataSource:[
+				url:postgreSQLContainer.jdbcUrl,
+				user:postgreSQLContainer.username,
+				password:postgreSQLContainer.password,
+			],
+		]
 
-        and: 'a set of sql files and a mocked logger'
-        File[] sqlFiles = SQL_DIR
-                .listFiles(FixturesUtils.onlySqlFiles)
-                .sort()
-        Logger logger = Mock(Logger)
+		and: 'a set of sql files and a mocked logger'
+		File[] sqlFiles = SQL_DIR
+				.listFiles(FixturesUtils.onlySqlFiles)
+				.sort()
+		Logger logger = Mock(Logger)
 
-        when: 'executing the processor'
-        new SqlProcessor(config, sqlFiles, logger).process()
+		when: 'executing the processor'
+		new SqlProcessor(config, sqlFiles, logger).process()
 
-        and: 'checking how many rows have been added'
-        Integer rows = Sql
-                .newInstance(config.dataSource)
-                .firstRow('SELECT count(*) as counter FROM avengers')
-                .get('counter') as Integer
+		and: 'checking how many rows have been added'
+		Integer rows = Sql
+				.newInstance(config.dataSource)
+				.firstRow('SELECT count(*) as counter FROM avengers')
+				.get('counter') as Integer
 
-        then: 'we should get the expected row number'
-        rows == 3
-    }
+		then: 'we should get the expected row number'
+		rows == 3
+	}
 }

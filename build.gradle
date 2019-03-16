@@ -1,13 +1,9 @@
-buildscript {
-	repositories { mavenCentral() }
-
-	dependencies { classpath 'org.postgresql:postgresql:42.2.5' }
-}
-
 plugins {
 	id 'groovy'
 	id 'codenarc'
+	id 'maven-publish'
 	id 'java-gradle-plugin'
+	id 'com.gradle.plugin-publish' version '0.10.0'
 	id "com.diffplug.gradle.spotless" version "3.18.0"
 	id "com.github.hierynomus.license" version "0.15.0"
 }
@@ -16,14 +12,6 @@ apply from: 'gradle/quality.gradle'
 
 repositories { mavenCentral() }
 
-configurations { driver }
-
-dependencies { driver 'org.postgresql:postgresql:42.2.5' }
-
-configurations.driver.each { File file ->
-	gradle.class.classLoader.addURL(file.toURI().toURL())
-}
-
 dependencies {
 	implementation gradleApi()
 	implementation localGroovy()
@@ -31,7 +19,7 @@ dependencies {
 	compile 'org.yaml:snakeyaml:1.23'
 
 	testCompile gradleTestKit()
-	testCompile 'org.postgresql:postgresql:42.2.5'
+	testRuntime 'org.postgresql:postgresql:42.2.5'
 	testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
 	testCompile "org.testcontainers:spock:1.10.6"
 	testCompile "org.testcontainers:postgresql:1.10.6"
@@ -54,10 +42,32 @@ sourceSets {
 	}
 }
 
+group = 'net.kaleidos.dwbh'
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+compileJava {
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+
+pluginBundle {
+	website = 'https://github.com/dont-worry-be-happy/dwbh-gradle-fixtures'
+	vcsUrl = 'https://github.com/dont-worry-be-happy/dwbh-gradle-fixtures'
+	tags = [
+		'database',
+		'fixtures',
+		'jdbc'
+	]
+}
+
 gradlePlugin {
 	plugins {
 		fixturesPlugin {
-			id = 'dwbh.gradle.fixtures'
+			id = 'net.kaleidos.dwbh.gradle-fixtures-plugin'
+			displayName = 'DWBH Fixtures plugin'
+			description = 'Simple plugin for loading database fixtures using a JDBC connection'
 			implementationClass = 'dwbh.gradle.fixtures.FixturesPlugin'
 		}
 	}

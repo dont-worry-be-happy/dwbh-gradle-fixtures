@@ -64,36 +64,38 @@ class FixturesPlugin implements Plugin<Project> {
 		project.tasks.create(TASK_NAME_LOAD, FixturesTask) { it.description = 'loads all fixtures' }
 		project.tasks.create(TASK_NAME_CLEAN, FixturesTask) { it.description = 'wipes out all fixtures' }
 
-		project.afterEvaluate {
-			FixturesExtension extension = project
-					.extensions
-					.getByType(FixturesExtension)
+		project.afterEvaluate(this.&afterEvaluate)
+	}
 
-			File configFile = Optional
-					.ofNullable(extension.configFile)
-					.map { project.file(it) }
-					.orElse(DEFAULT_CONFIG_FILE)
+	private void afterEvaluate(Project project) {
+		FixturesExtension extension = project
+				.extensions
+				.getByType(FixturesExtension)
 
-			File loadDir = Optional
-					.ofNullable(extension.loadDir)
-					.map { project.file(it) }
-					.orElse(DEFAULT_LOAD_DIR)
+		File configFile = Optional
+				.ofNullable(extension.configFile)
+				.map { project.file(it) }
+				.orElse(DEFAULT_CONFIG_FILE)
 
-			File cleanDir = Optional.ofNullable(extension.cleanDir)
-					.map { project.file(it) }
-					.orElse(DEFAULT_CLEAN_DIR)
+		File loadDir = Optional
+				.ofNullable(extension.loadDir)
+				.map { project.file(it) }
+				.orElse(DEFAULT_LOAD_DIR)
 
-			project.tasks.getByName(TASK_NAME_LOAD).configure { FixturesTask t ->
-				t.inputDir = loadDir
-				t.configFile = configFile
-				t.isClean = false
-			}
+		File cleanDir = Optional.ofNullable(extension.cleanDir)
+				.map { project.file(it) }
+				.orElse(DEFAULT_CLEAN_DIR)
 
-			project.tasks.getByName(TASK_NAME_CLEAN).configure { FixturesTask t ->
-				t.inputDir = cleanDir
-				t.configFile = configFile
-				t.isClean = true
-			}
+		project.tasks.getByName(TASK_NAME_LOAD).configure { FixturesTask t ->
+			t.inputDir = loadDir
+			t.configFile = configFile
+			t.isClean = false
+		}
+
+		project.tasks.getByName(TASK_NAME_CLEAN).configure { FixturesTask t ->
+			t.inputDir = cleanDir
+			t.configFile = configFile
+			t.isClean = true
 		}
 	}
 }
