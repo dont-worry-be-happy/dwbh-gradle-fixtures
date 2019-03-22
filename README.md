@@ -1,5 +1,5 @@
-[![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/net/kaleidos/dwbh/gradle-fixtures-plugin/maven-metadata.xml.svg?label=gradle-plugin-portal)](https://plugins.gradle.org/plugin/net.kaleidos.dwbh-gradle-fixtures-plugin)
-[![Travis](https://travis-ci.com/dont-worry-be-happy/dwbh-gradle-fixtures.svg?branch=master)](https://travis-ci.org/dont-worry-be-happy/dwbh-gradle-fixtures) 
+[![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/net/kaleidos/dwbh/gradle-fixtures-plugin/maven-metadata.xml.svg?label=gradle-plugin-portal)](https://plugins.gradle.org/plugin/net.kaleidos.dwbh.gradle-fixtures-plugin)
+[![Travis](https://travis-ci.com/dont-worry-be-happy/dwbh-gradle-fixtures.svg?branch=master)](https://travis-ci.org/dont-worry-be-happy/dwbh-gradle-fixtures)
 [![License](https://img.shields.io/github/license/dont-worry-be-happy/dwbh-gradle-fixtures.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 # DWBH FIXTURES GRADLE PLUGIN
@@ -13,7 +13,7 @@ Using the new plugins DSL:
 
 ```groovy
 plugins {
-   id 'net.kaleidos.dwbh.gradle-fixtures-plugin' version "0.1.0"
+   id 'net.kaleidos.dwbh.gradle-fixtures-plugin' version "0.1.1"
 }
 ```
 
@@ -27,7 +27,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "net.kaleidos.dwbh:gradle-fixtures-plugin:0.1.0"
+    classpath "net.kaleidos.dwbh:gradle-fixtures-plugin:0.1.1"
   }
 }
 
@@ -57,11 +57,16 @@ Here are the definitions of each field:
 
 ## Database dependencies
 
-Tasks use the project's database dependencies declared as `runtime` dependencies, e.g:
+To include your database dependency, make sure it's defined at the buildscript dependencies , e.g:
 
 ```groovy
-dependencies {
-    runtime 'org.postgresql:postgresql:42.2.5'
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+      classpath 'org.postgresql:postgresql:42.2.5'
+  }
 }
 ```
 
