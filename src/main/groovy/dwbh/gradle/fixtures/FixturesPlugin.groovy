@@ -17,7 +17,6 @@
  */
 package dwbh.gradle.fixtures
 
-import groovy.sql.Sql
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -32,6 +31,8 @@ import org.gradle.api.Project
  * @since 0.1.0
  */
 class FixturesPlugin implements Plugin<Project> {
+
+	static final String EXTENSION_NAME = 'fixtures'
 
 	static final String TASK_NAME_CLEAN = 'fixtures-clean'
 
@@ -60,23 +61,13 @@ class FixturesPlugin implements Plugin<Project> {
 
 	@Override
 	void apply(Project project) {
-		project.extensions.create('fixtures', FixturesExtension)
+		project.extensions.create(EXTENSION_NAME, FixturesExtension)
+		project.configurations.create(EXTENSION_NAME)
 
 		project.tasks.create(TASK_NAME_LOAD, FixturesTask) { it.description = 'loads all fixtures' }
 		project.tasks.create(TASK_NAME_CLEAN, FixturesTask) { it.description = 'wipes out all fixtures' }
 
-		enableJdbcDrivers(project)
-
 		project.afterEvaluate(this.&afterEvaluate)
-	}
-
-	private void enableJdbcDrivers(Project project) {
-		// https://discuss.gradle.org/t/jdbc-driver-class-cannot-be-loaded-with-gradle-2-0-but-worked-with-1-12/2277/6
-		// enables using jdbc drivers set in buildscript -> dependencies -> classpath
-		ClassLoader loader = Sql.classLoader
-		project.buildscript.configurations.classpath.each { File file ->
-			loader.addURL(file.toURI().toURL())
-		}
 	}
 
 	private void afterEvaluate(Project project) {

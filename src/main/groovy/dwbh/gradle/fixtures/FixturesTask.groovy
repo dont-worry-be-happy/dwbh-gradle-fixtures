@@ -17,8 +17,10 @@
  */
 package dwbh.gradle.fixtures
 
+import groovy.sql.Sql
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.Project
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
@@ -35,7 +37,7 @@ class FixturesTask extends DefaultTask {
 	 *
 	 * @since 0.1.0
 	 */
-	String group = 'fixtures'
+	String group = FixturesPlugin.EXTENSION_NAME
 
 	/**
 	 * Where to put the fixtures SQL files
@@ -67,6 +69,8 @@ class FixturesTask extends DefaultTask {
 	 */
 	@TaskAction
 	void executeTask() {
+		enableJdbcDrivers(this.project)
+
 		logger.lifecycle "------------------${this.name.toUpperCase()}-----------------"
 
 		if (!configFile.exists()) {
@@ -81,6 +85,16 @@ class FixturesTask extends DefaultTask {
 		}
 
 		processFiles(configFile, sqlFiles)
+	}
+
+	private void enableJdbcDrivers(Project project) {
+		// https://discuss.gradle.org/t/jdbc-driver-class-cannot-be-loaded-with-gradle-2-0-but-worked-with-1-12/2277/6
+		ClassLoader loader = Sql.classLoader
+
+		// enables loading drivers via fixtures configuration
+		project.configurations.getByName(FixturesPlugin.EXTENSION_NAME).each { File file ->
+			loader.addURL(file.toURI().toURL())
+		}
 	}
 
 	private void processFiles(File configFile, File[] sqlFiles) {
