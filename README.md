@@ -13,7 +13,7 @@ Using the new plugins DSL:
 
 ```groovy
 plugins {
-   id 'net.kaleidos.dwbh.gradle-fixtures-plugin' version "0.1.1"
+   id 'net.kaleidos.dwbh.gradle-fixtures-plugin' version "0.1.2"
 }
 ```
 
@@ -27,7 +27,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "net.kaleidos.dwbh:gradle-fixtures-plugin:0.1.1"
+    classpath "net.kaleidos.dwbh:gradle-fixtures-plugin:0.1.2"
   }
 }
 
@@ -57,20 +57,13 @@ Here are the definitions of each field:
 
 ## Database dependencies
 
-To include your database dependency, make sure it's defined at the buildscript dependencies , e.g:
+To include your database dependency, you can add the driver dependency in your project's dependencies block, e.g:
 
 ```groovy
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-      classpath 'org.postgresql:postgresql:42.2.5'
-  }
+dependencies {
+  fixtures 'org.postgresql:postgresql:42.2.5'
 }
 ```
-
-**IMPORTANT**: This has to be at the top of the gradle file.
 
 ## Loading fixtures
 
