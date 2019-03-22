@@ -66,10 +66,19 @@ class FixturesPluginSpecification extends Specification {
           driverClass: driverClassName
         '''
 		buildFile << '''
+            repositories {
+                mavenCentral()
+            }
+
+            dependencies {
+                fixtures 'org.postgresql:postgresql:42.2.5'
+            }
+
             fixtures {
                 configFile = "fixtures.yml"
             }
         '''
+
 		when: 'executing the fixtures-load task'
 		BuildResult result = GradleRunner.create()
 				.withProjectDir(testProjectDir.root)
